@@ -1,53 +1,50 @@
-# Ex24 Shortest Path and Reachability in a Heritage Town using BFS
-## DATE: 07-11-2025
+# Ex25 Finding the Fastest Route to a Charging Station using Dijkstra’s Algorithm
+## DATE:08-11-2025
 ## AIM:
-To design and implement a Python program that, given a map of attractions in a heritage town connected by walking paths, recommends:
-The shortest number of paths (minimum hops) from a starting attraction to a target attraction.
-The number of reachable attractions from the same starting point using Breadth-First Search (BFS)
-
-
+To design and implement a Python program that helps an electric vehicle (EV) find the shortest travel time from its current block to the nearest charging station using Dijkstra’s shortest path algorithm.
 ## Algorithm
-1. Read number of attractions (nodes) n and number of paths (edges) m.
-2. Build adjacency list for the undirected graph.
-3. Run BFS from the start node to compute distances and visited nodes.
-4. Shortest hops = distance[target] (use -1 or "unreachable" if not visited).
-5. Reachable count = number of visited nodes (excluding the start if you prefer).
-6. Print results.
+1. Read number of blocks (nodes) and roads (edges) with travel times (weights).
+2. Build a weighted adjacency list for the graph.
+3. Read the list of charging station nodes.
+4. Run Dijkstra’s algorithm from the EV’s current location to compute shortest distances to all nodes.
+5. Find the minimum distance among all charging stations.
+6. Output the fastest route travel time and the corresponding charging station.
   
 
 ## Program:
 ```
 /*
-Program to determine Shortest Path and Reachability in a Heritage Town using BFS
+Program to find the Fastest Route to a Charging Station using Dijkstra’s Algorithm
 Developed by: V.YOGESH
-RegisterNumber:  212223230250
+RegisterNumber: 212223230250
+
+*/
+
 import java.util.*;
 
-public class HeritageTownBFS {
-    static List<List<Integer>> buildGraph(int n, int[][] edges) {
-        List<List<Integer>> g = new ArrayList<>();
-        for (int i = 0; i < n; i++) g.add(new ArrayList<>());
-        for (int[] e : edges) {
-            int u = e[0], v = e[1];
-            g.get(u).add(v);
-            g.get(v).add(u);
-        }
-        return g;
-    }
+class Edge {
+    int to, weight;
+    Edge(int to, int weight) { this.to = to; this.weight = weight; }
+}
 
-    static int[] bfsDistances(List<List<Integer>> g, int src) {
-        int n = g.size();
+public class FastestChargingRoute {
+
+    static int[] dijkstra(List<List<Edge>> graph, int src) {
+        int n = graph.size();
         int[] dist = new int[n];
-        Arrays.fill(dist, -1);
-        Queue<Integer> q = new LinkedList<>();
+        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[src] = 0;
-        q.add(src);
-        while (!q.isEmpty()) {
-            int u = q.poll();
-            for (int v : g.get(u)) {
-                if (dist[v] == -1) {
-                    dist[v] = dist[u] + 1;
-                    q.add(v);
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{src, 0});
+        
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int u = curr[0], d = curr[1];
+            if (d > dist[u]) continue;
+            for (Edge e : graph.get(u)) {
+                if (dist[u] + e.weight < dist[e.to]) {
+                    dist[e.to] = dist[u] + e.weight;
+                    pq.add(new int[]{e.to, dist[e.to]});
                 }
             }
         }
@@ -56,50 +53,58 @@ public class HeritageTownBFS {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter number of attractions (n): ");
+        System.out.print("Enter number of blocks (nodes): ");
         int n = sc.nextInt();
-        System.out.print("Enter number of paths (m): ");
+        System.out.print("Enter number of roads (edges): ");
         int m = sc.nextInt();
-
-        System.out.println("Enter edges (u v) using 0-based indices, one per line:");
-        int[][] edges = new int[m][2];
+        
+        List<List<Edge>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        
+        System.out.println("Enter roads as (u v travelTime) with 0-based indices:");
         for (int i = 0; i < m; i++) {
-            edges[i][0] = sc.nextInt();
-            edges[i][1] = sc.nextInt();
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+            graph.get(u).add(new Edge(v, w));
+            graph.get(v).add(new Edge(u, w));
         }
 
-        List<List<Integer>> graph = buildGraph(n, edges);
+        System.out.print("Enter number of charging stations: ");
+        int k = sc.nextInt();
+        int[] stations = new int[k];
+        System.out.println("Enter charging station nodes (0-based):");
+        for (int i = 0; i < k; i++) stations[i] = sc.nextInt();
 
-        System.out.print("Enter start attraction (0-based): ");
+        System.out.print("Enter current block of EV (0-based): ");
         int start = sc.nextInt();
-        System.out.print("Enter target attraction (0-based): ");
-        int target = sc.nextInt();
 
-        int[] dist = bfsDistances(graph, start);
+        int[] dist = dijkstra(graph, start);
+        int minDist = Integer.MAX_VALUE;
+        int nearestStation = -1;
+        for (int station : stations) {
+            if (dist[station] < minDist) {
+                minDist = dist[station];
+                nearestStation = station;
+            }
+        }
 
-        int reachableCount = 0;
-        for (int d : dist) if (d != -1) reachableCount++;
-
-        System.out.println();
-        if (dist[target] == -1)
-            System.out.println("Target is unreachable from start.");
+        if (nearestStation == -1 || minDist == Integer.MAX_VALUE)
+            System.out.println("No reachable charging station.");
         else
-            System.out.println("Shortest number of paths (minimum hops) from " + start + " to " + target + ": " + dist[target]);
+            System.out.println("Nearest charging station: " + nearestStation + " with travel time: " + minDist);
 
-        System.out.println("Number of reachable attractions from " + start + ": " + reachableCount);
         sc.close();
     }
-}
+} 
 */
 ```
 
 ## Output:
 
-<img width="630" height="448" alt="image" src="https://github.com/user-attachments/assets/abeed5c2-9832-499b-a52e-d49ad705bae3" />
+<img width="543" height="419" alt="image" src="https://github.com/user-attachments/assets/eb1cfce5-e997-4869-8432-3f6cc9545bbb" />
 
 
 ## Result:
 The program has been successfully implemented and executed.
-It correctly computes:
-The shortest number of paths (minimum hops) between two attractions.
-The total number of reachable attractions from a given starting point using BFS traversal.
+It uses Dijkstra’s algorithm to determine the shortest travel time from the EV’s current location to the nearest charging station and correctly handles cases where no station is reachable.
