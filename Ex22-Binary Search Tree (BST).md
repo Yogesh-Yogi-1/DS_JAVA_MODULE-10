@@ -1,90 +1,69 @@
 # Ex22 Searching for a Book ID in a Binary Search Tree (BST)
-## DATE:31-10-2025
+## DATE: 31/10/25
 ## AIM:
-To design and implement a Python program that constructs a Binary Search Tree (BST) using given Book IDs and checks whether a specific Book ID exists in the BST.
+To design and implement java program that constructs a Binary Search Tree (BST) using given Book IDs and checks whether a specific Book ID exists in the BST.
 ## Algorithm
 1. Start the program.
-2. Define a Node class with data, left, and right references.
-3. Create an insert() function to insert nodes into the BST following BST rules.
-4. Create a search() function to find a Book ID in the BST.
-5. Build the BST using given Book IDs.
-6. Search for a specific Book ID entered by the user.
-7. Display whether the Book ID exists in the tree.
-8. End the program.
-   
+2. Read integer.
+3. Initialize root equals to null.
+4. Repeat n times.
+5. Insert(root, key).
+6. Searching Book ID.
+7. Search(root, key).
+8.  Stop the program.   
 
 ## Program:
 ```
-/*
-Program to construct a Binary Search Tree (BST) using given Book IDs 
-and check whether a specific Book ID exists in the BST.
-Developed by: V. YOGESH
-RegisterNumber: 212223230250
 
-*/
+Program to constructs a Binary Search Tree (BST) using given Book IDs 
+
+
 import java.util.*;
 
-class Node {
-    int data;
-    Node left, right;
-    Node(int data) {
-        this.data = data;
-        left = right = null;
+public class BookIDSearch {
+    static class Node {
+        int data;
+        Node left, right;
+        Node(int data) {
+            this.data = data;
+        }
     }
-}
 
-public class BookSearchBST {
-    public static Node insert(Node root, int data) {
-        if (root == null)
-            return new Node(data);
-        if (data < root.data)
-            root.left = insert(root.left, data);
-        else if (data > root.data)
-            root.right = insert(root.right, data);
+    public static Node insert(Node root, int key) {
+        if (root == null) return new Node(key);
+        if (key < root.data) root.left = insert(root.left, key);
+        else root.right = insert(root.right, key);
         return root;
     }
 
     public static boolean search(Node root, int key) {
-        if (root == null)
-            return false;
-        if (root.data == key)
-            return true;
-        if (key < root.data)
-            return search(root.left, key);
-        else
-            return search(root.right, key);
+        if (root == null) return false;
+        if (root.data == key) return true;
+        if (key < root.data) return search(root.left, key);
+        else return search(root.right, key);
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Node root = null;
-        System.out.print("Enter number of Book IDs: ");
         int n = sc.nextInt();
-        System.out.println("Enter Book IDs:");
+        Node root = null;
         for (int i = 0; i < n; i++) {
-            int id = sc.nextInt();
-            root = insert(root, id);
+            root = insert(root, sc.nextInt());
         }
-
-        System.out.print("Enter Book ID to search: ");
-        int key = sc.nextInt();
-
-        if (search(root, key))
-            System.out.println("Book ID found in the library system.");
-        else
-            System.out.println("Book ID not found in the library system.");
-        sc.close();
+        int q = sc.nextInt();
+        while (q-- > 0) {
+            int key = sc.nextInt();
+            System.out.println(search(root, key) ? "Found" : "Not Found");
+        }
     }
-}  
-*/
+}
+
 ```
 
 ## Output:
-<img width="580" height="154" alt="image" src="https://github.com/user-attachments/assets/db2bb188-7daf-4b6c-b0bf-c4afeecfb698" />
 
-
+<img width="507" height="387" alt="image" src="https://github.com/user-attachments/assets/3959e1d5-1697-4cd0-8afd-d13836b92af2" />
 
 ## Result:
 The program has been successfully implemented and executed.
 It constructs a Binary Search Tree from the given Book IDs and accurately determines whether a queried Book ID exists in the library system.
-**
