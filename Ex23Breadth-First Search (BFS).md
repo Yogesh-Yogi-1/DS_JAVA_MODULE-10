@@ -1,44 +1,43 @@
 # Ex23 Breadth-First Search (BFS) Traversal of a City Junction Map
-## DATE:01-11-2025
+## DATE: 01/11/2025
 ## AIM:
-To design and implement a Python program to perform Breadth-First Search (BFS) traversal on a city’s junction map represented as a graph, and find all reachable locations from a given source junction.
+To design and implement a java program to perform Breadth-First Search (BFS) traversal on a city’s junction map represented as a graph, and find all reachable locations from a given source junction.
 ## Algorithm
 1. Start the program.
-2. Read the number of junctions (vertices) and roads (edges).
-3. Build an adjacency list to represent the graph.
-4. Read the source junction.
-5. Use a queue and a visited array to perform BFS.
-6. Print the order of traversal showing all reachable junctions.
-7. Stop the program. 
- 
+2. Read two integers.
+3. Create an adjacency list g of size n.
+4. Repeat e times.
+5. Read the source node.
+6. Initialize a boolean array of size n, all set to false.
+7. Create an empty queue.
+8. Mark src as visited and enqueue it.
+9. Continue until all reachable nodes are processed.
+10. Stop the program.
 
 ## Program:
 ```
-/*
-Program to perform Breadth-First Search (BFS) traversal on a city's junction map represented as a graph
-Developed by: V.YOGESH
-RegisterNumber: 212223230250
-*/
+
+Program to perform Breadth-First Search (BFS) traversal on a city’s junction map represented as a graph
 
 import java.util.*;
 
-public class BFSJunctionMap {
-    static void bfsTraversal(Map<Integer, List<Integer>> graph, int src, int n) {
-        boolean[] visited = new boolean[n];
-        Queue<Integer> queue = new LinkedList<>();
+public class EmergencyRouteBFS {
+    public static void addEdge(List<List<Integer>> g, int u, int v) {
+        g.get(u).add(v);
+        g.get(v).add(u);
+    }
 
+    public static void bfs(List<List<Integer>> g, int src, boolean[] visited) {
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(src);
         visited[src] = true;
-        queue.add(src);
-
-        System.out.print("BFS Traversal (reachable junctions): ");
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-            System.out.print(node + " ");
-
-            for (int neighbor : graph.get(node)) {
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+            System.out.print(curr + " ");
+            for (int neighbor : g.get(curr)) {
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
-                    queue.add(neighbor);
+                    q.offer(neighbor);
                 }
             }
         }
@@ -46,40 +45,20 @@ public class BFSJunctionMap {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter number of junctions (nodes): ");
-        int n = sc.nextInt();
-
-        System.out.print("Enter number of roads (edges): ");
-        int e = sc.nextInt();
-
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-        for (int i = 0; i < n; i++)
-            graph.put(i, new ArrayList<>());
-
-        System.out.println("Enter the roads (u v) with 0-based indices:");
-        for (int i = 0; i < e; i++) {
-            int u = sc.nextInt();
-            int v = sc.nextInt();
-            graph.get(u).add(v);
-            graph.get(v).add(u); // Undirected graph
-        }
-
-        System.out.print("Enter source junction (0-based): ");
+        int n = sc.nextInt(), e = sc.nextInt();
+        List<List<Integer>> g = new ArrayList<>();
+        for (int i = 0; i < n; i++) g.add(new ArrayList<>());
+        for (int i = 0; i < e; i++) addEdge(g, sc.nextInt(), sc.nextInt());
         int src = sc.nextInt();
-
-        bfsTraversal(graph, src, n);
-        sc.close();
+        bfs(g, src, new boolean[n]);
     }
-}  
-*/
+}
+
 ```
 
 ## Output:
-
-
-<img width="507" height="320" alt="image" src="https://github.com/user-attachments/assets/e0ce1da3-50f3-4744-aa82-814a1221c2d0" />
+<img width="464" height="325" alt="image" src="https://github.com/user-attachments/assets/ba67be71-eb74-438b-8171-68be3a1a498e" />
 
 ## Result:
 The program has been successfully implemented and executed.
 It performs Breadth-First Search (BFS) traversal on a city junction map and correctly lists all reachable locations from the given source node.
-v
